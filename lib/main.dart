@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
  class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -12,13 +14,16 @@ void main() {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: CounterScreen(),
+      home: const CounterScreen(),
     );
   }
 }
 
 class  CounterScreen extends StatefulWidget {
+  const CounterScreen({super.key});
+
   @override
+   // ignore: library_private_types_in_public_api
    _CounterScreenState createState() => _CounterScreenState();
 }
 
