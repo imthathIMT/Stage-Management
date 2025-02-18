@@ -44,7 +44,9 @@ class _CounterScreenState extends State<CounterScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Counter App',
-        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+        style: TextStyle(fontSize: 20, 
+          fontWeight: FontWeight.bold, 
+          color: Colors.white),
         
         ),
         backgroundColor: Colors.blue[900],
