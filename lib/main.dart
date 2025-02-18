@@ -1,87 +1,68 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
- class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  // Initial theme mode is light
+  bool _isDarkMode = false;
+
+  // Function to toggle theme
+  void _toggleTheme() {
+    setState(() {
+      _isDarkMode = !_isDarkMode;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Counter App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+      // Set the theme based on the _isDarkMode value
+      themeMode: _isDarkMode ? ThemeMode.dark : ThemeMode.light,
+      theme: ThemeData.light().copyWith(
+        primaryColor: Colors.blue,
+        buttonTheme: const ButtonThemeData(buttonColor: Colors.blue),
       ),
-      home: CounterScreen(),
-    );
-  }
-}
-
-class  CounterScreen extends StatefulWidget {
-  @override
-   _CounterScreenState createState() => _CounterScreenState();
-}
-
-class _CounterScreenState extends State<CounterScreen> {
-  int _counter = 0;  // This will hold the counter value
-
-  // Function to increment the counter
-  void _incrementCounter() {
-    setState(() {
-      _counter++;  // Increment the counter value
-    });
-  }
-
-  // Function to decrement the counter
-  void _decrementCounter() {
-    setState(() {
-      _counter--;  // Decrement the counter value
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Counter App',
-        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
-        
-        ),
-        backgroundColor: Colors.blue[900],
+      darkTheme: ThemeData.dark().copyWith(
+        primaryColor: Colors.amber,
+        buttonTheme: const ButtonThemeData(buttonColor: Colors.amber),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children:  <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-              style: TextStyle(fontSize: 18),
-            ),
-            Text(
-              '$_counter',  // Display the current value of _counter
-              style:const TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                // Increment Button
-                ElevatedButton(
-                  onPressed: _incrementCounter,
-                  child:const Text('+', 
-                  style: TextStyle(fontSize: 20),
-                  ),
-                ),
-               const SizedBox(width: 20),
-                // Decrement Button
-                ElevatedButton(
-                  onPressed: _decrementCounter,
-                  child: const Text('-'
-                  ,style: TextStyle(fontSize: 20),
-                  ),
-                ),
-              ],
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Theme Toggle App'),
+          actions: [
+            // Button to toggle theme
+            IconButton(
+              icon: Icon(_isDarkMode ? Icons.wb_sunny : Icons.nightlight_round),
+              onPressed: _toggleTheme,
             )
           ],
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Current Theme: ${_isDarkMode ? "Dark" : "Light"}',
+                style: const TextStyle(fontSize: 20),
+              ),
+              const SizedBox(height: 20),
+              // 
+              IconButton(
+              icon: Icon(_isDarkMode ? Icons.wb_sunny : Icons.nightlight_round),
+              onPressed: _toggleTheme,
+            )
+            ],
+          ),
         ),
       ),
     );
