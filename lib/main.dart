@@ -1,86 +1,101 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+// Counter model that holds the state and notifies listeners
+class CounterModel extends ChangeNotifier {
+  int _counter = 0;
+
+  int get counter => _counter;
+
+  // Function to increment the counter
+  void increment() {
+    _counter++;
+    notifyListeners();  // Notify listeners about the change
+  }
+
+  // Function to decrement the counter
+  void decrement() {
+    _counter--;
+    //notifyListeners();  // Notify listeners about the change
+  }
+}
 
 void main() {
   runApp(MyApp());
 }
 
- class MyApp extends StatelessWidget {
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Counter App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return ChangeNotifierProvider(
+      create: (context) => CounterModel(),  // Provide the CounterModel to the widget tree
+      child: MaterialApp(
+        title: 'Flutter Counter App',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: CounterScreen(),
       ),
-      home: CounterScreen(),
     );
   }
 }
 
-class  CounterScreen extends StatefulWidget {
-  @override
-   _CounterScreenState createState() => _CounterScreenState();
-}
-
-class _CounterScreenState extends State<CounterScreen> {
-  int _counter = 0;  // This will hold the counter value
-
-  // Function to increment the counter
-  void _incrementCounter() {
-    setState(() {
-      _counter++;  // Increment the counter value
-    });
-  }
-
-  // Function to decrement the counter
-  void _decrementCounter() {
-    setState(() {
-      _counter--;  // Decrement the counter value
-    });
-  }
-
+class CounterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Counter App',
-        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
-        
+        title: const Text(
+          'Counter App',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
         ),
         backgroundColor: Colors.blue[900],
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children:  <Widget>[
+          children: <Widget>[
             const Text(
               'You have pushed the button this many times:',
               style: TextStyle(fontSize: 18),
             ),
-            Text(
-              '$_counter',  // Display the current value of _counter
-              style:const TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
+            // Use Consumer to listen to changes in the CounterModel
+            Consumer<CounterModel>(
+              builder: (context, counterModel, child) {
+                return Text(
+                  '${counterModel.counter}', // Display the current counter value
+                  style: const TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
+                );
+              },
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 // Increment Button
                 ElevatedButton(
-                  onPressed: _incrementCounter,
-                  child:const Text('+', 
-                  style: TextStyle(fontSize: 20),
+                  onPressed: () {
+                    // Access CounterModel and increment the counter
+                    Provider.of<CounterModel>(context, listen: false).increment();
+                  },
+                  child: const Text(
+                    '+',
+                    style: TextStyle(fontSize: 20),
                   ),
                 ),
-               const SizedBox(width: 20),
+                const SizedBox(width: 20),
                 // Decrement Button
                 ElevatedButton(
-                  onPressed: _decrementCounter,
-                  child: const Text('-'
-                  ,style: TextStyle(fontSize: 20),
+                  onPressed: () {
+                    // Access CounterModel and decrement the counter
+                    Provider.of<CounterModel>(context, listen: false).decrement();
+                  },
+                  child: const Text(
+                    '-',
+                    style: TextStyle(fontSize: 20),
                   ),
                 ),
               ],
-            )
+            ),
           ],
         ),
       ),
